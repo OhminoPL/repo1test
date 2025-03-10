@@ -1,23 +1,37 @@
-def kalkulator():
-    while True:
-        # Pobranie wyrażenia od użytkownika
-        wyrazenie = input("Wpisz wyrażenie lub 'koniec', aby zakończyć: ")
+import tkinter as tk
+from tkinter import messagebox
 
-        # Sprawdzenie, czy użytkownik chce zakończyć
-        if wyrazenie.lower() == "koniec":
-            print("Koniec programu")
-            break
-
+def oblicz_wyrazenie():
+    wyrazenie = entry.get()
+    if wyrazenie.lower() == "koniec":
+        root.destroy()  # Zamyka GUI
+    else:
         try:
-            # Obliczenie wyniku za pomocą funkcji eval
             wynik = eval(wyrazenie)
-            print(f"Wynik: {wynik}")
+            messagebox.showinfo("Wynik", f"Wynik: {wynik}")
         except SyntaxError:
-            print("Nieprawidłowe wyrażenie: błąd składni")
+            messagebox.showerror("Błąd", "Nieprawidłowe wyrażenie: błąd składni")
         except ZeroDivisionError:
-            print("Nieprawidłowe wyrażenie: dzielenie przez zero")
+            messagebox.showerror("Błąd", "Nieprawidłowe wyrażenie: dzielenie przez zero")
         except Exception as e:
-            print(f"Nieprawidłowe wyrażenie: {e}")
+            messagebox.showerror("Błąd", f"Nieprawidłowe wyrażenie: {e}")
 
-# Uruchomienie kalkulatora
-kalkulator()
+# Tworzenie głównego okna aplikacji
+root = tk.Tk()
+root.title("Kalkulator")
+
+# Pola tekstowe i przyciski
+label = tk.Label(root, text="Wpisz wyrażenie:")
+label.pack()
+
+entry = tk.Entry(root, width=30)
+entry.pack()
+
+button = tk.Button(root, text="Oblicz", command=oblicz_wyrazenie)
+button.pack()
+
+koniec_button = tk.Button(root, text="Koniec", command=root.destroy)
+koniec_button.pack()
+
+# Uruchomienie aplikacji
+root.mainloop()
