@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 
-def oblicz_wyrazenie():
+def oblicz_wyrazenie(event=None):  # Dodano opcjonalny argument event
     wyrazenie = entry.get()
     if wyrazenie.lower() == "koniec":
         root.destroy()  # Zamyka GUI
@@ -26,6 +26,7 @@ label.pack()
 
 entry = tk.Entry(root, width=30)
 entry.pack()
+entry.bind('<Return>', oblicz_wyrazenie)  # Przypisanie Enter do funkcji oblicz_wyrazenie
 
 button = tk.Button(root, text="Oblicz", command=oblicz_wyrazenie)
 button.pack()
