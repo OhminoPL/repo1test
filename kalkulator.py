@@ -19,6 +19,10 @@ def oblicz_wyrazenie(event=None):  # Dodano opcjonalny argument event
 def wstaw_tekst(tekst):
     entry.insert(tk.END, tekst)
 
+def zmniejsz_i_przywroc(button):
+    button.config(width=4, height=2)  # Zmniejszenie przycisku
+    root.after(200, lambda: button.config(width=5, height=2))  # Przywrócenie po 200ms
+
 # Tworzenie głównego okna aplikacji
 root = tk.Tk()
 root.title("Kalkulator")
@@ -43,8 +47,13 @@ przyciski = [
 ]
 
 for (tekst, wiersz, kolumna) in przyciski:
-    button = tk.Button(frame, text=tekst, width=5, command=lambda t=tekst: wstaw_tekst(t))
+    # Tworzenie przycisku
+    button = tk.Button(frame, text=tekst, width=5, height=2)
+    # Ustawienie odpowiedniego działania dla przycisku
+    button.config(command=lambda t=tekst, b=button: [zmniejsz_i_przywroc(b), wstaw_tekst(t)])
     button.grid(row=wiersz, column=kolumna)
+
+    
 
 # Przyciski dodatkowe
 button = tk.Button(root, text="Oblicz", command=oblicz_wyrazenie)
@@ -52,6 +61,18 @@ button.pack()
 
 koniec_button = tk.Button(root, text="Koniec", command=root.destroy)
 koniec_button.pack()
+
+def keypress(event):
+    # Dodaje wpisany klawisz do pola tekstowego
+    if event.char.isdigit() or event.char in '+-*/.':
+        entry.insert(tk.END, event.char)
+    elif event.keysym == "Return":  # Obsługuje Enter
+        oblicz_wyrazenie()
+    elif event.keysym == "BackSpace":  # Obsługuje Backspace
+        entry.delete(len(entry.get()) - 1, tk.END)
+
+# Dodaj poniższą linię, aby przypisać zdarzenia klawiszowe do głównego okna
+root.bind('<Key>', keypress)
 
 # Uruchomienie aplikacji
 root.mainloop()
