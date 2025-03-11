@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
 
-def oblicz_wyrazenie(event=None):  # Dodano opcjonalny argument event
+def oblicz_wyrazenie(event=None):
     wyrazenie = entry.get()
     if wyrazenie.lower() == "koniec":
-        root.destroy()  # Zamyka GUI
+        root.destroy()
     else:
         try:
             wynik = eval(wyrazenie)
@@ -20,8 +20,10 @@ def wstaw_tekst(tekst):
     entry.insert(tk.END, tekst)
 
 def zmniejsz_i_przywroc(button):
-    button.config(width=4, height=2)  # Zmniejszenie przycisku
-    root.after(200, lambda: button.config(width=5, height=2))  # Przywrócenie po 200ms
+    # Zmniejszenie rozmiaru przycisku
+    button.config(width=4, height=1)
+    # Przywrócenie oryginalnego rozmiaru po 200 ms
+    root.after(200, lambda: button.config(width=5, height=2))
 
 # Tworzenie głównego okna aplikacji
 root = tk.Tk()
@@ -33,9 +35,8 @@ label.pack()
 
 entry = tk.Entry(root, width=30)
 entry.pack()
-entry.bind('<Return>', oblicz_wyrazenie)  # Przypisanie Enter do funkcji oblicz_wyrazenie
+entry.bind('<Return>', oblicz_wyrazenie)
 
-# Przyciski cyfr i operatorów
 frame = tk.Frame(root)
 frame.pack()
 
@@ -49,11 +50,9 @@ przyciski = [
 for (tekst, wiersz, kolumna) in przyciski:
     # Tworzenie przycisku
     button = tk.Button(frame, text=tekst, width=5, height=2)
-    # Ustawienie odpowiedniego działania dla przycisku
+    # Przypisanie akcji do przycisku
     button.config(command=lambda t=tekst, b=button: [zmniejsz_i_przywroc(b), wstaw_tekst(t)])
     button.grid(row=wiersz, column=kolumna)
-
-    
 
 # Przyciski dodatkowe
 button = tk.Button(root, text="Oblicz", command=oblicz_wyrazenie)
@@ -66,12 +65,12 @@ def keypress(event):
     # Dodaje wpisany klawisz do pola tekstowego
     if event.char.isdigit() or event.char in '+-*/.':
         entry.insert(tk.END, event.char)
-    elif event.keysym == "Return":  # Obsługuje Enter
+    elif event.keysym == "Return":
         oblicz_wyrazenie()
-    elif event.keysym == "BackSpace":  # Obsługuje Backspace
+    elif event.keysym == "BackSpace":
         entry.delete(len(entry.get()) - 1, tk.END)
 
-# Dodaj poniższą linię, aby przypisać zdarzenia klawiszowe do głównego okna
+# Obsługa zdarzeń klawiatury
 root.bind('<Key>', keypress)
 
 # Uruchomienie aplikacji
